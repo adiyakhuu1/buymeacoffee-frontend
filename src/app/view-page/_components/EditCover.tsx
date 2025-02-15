@@ -35,12 +35,14 @@ type Props = {
   user: {
     profile?: user;
   };
+  owner?: boolean;
 };
-export default function EditCover({ user, setCount, count }: Props) {
+export default function EditCover({ user, setCount, count, owner }: Props) {
   const [image, setImage] = useState("");
   const [imagePreview, setImagePreview] = useState("");
 
   const [uploading, setUploading] = useState(false);
+  const [uploading2, setUploading2] = useState(false);
   const [editing, setEditing] = useState(false);
 
   const handleCancelCover = () => {
@@ -49,6 +51,7 @@ export default function EditCover({ user, setCount, count }: Props) {
   const imageInput = async (e: ChangeEvent<HTMLInputElement>) => {
     setEditing(true);
     setUploading(true);
+    setUploading2(true);
     if (e.target.files) {
       const objectUrl = URL.createObjectURL(e.target.files[0]);
       setImagePreview(objectUrl);
@@ -78,14 +81,16 @@ export default function EditCover({ user, setCount, count }: Props) {
       );
       const data = await res.json();
       setCount(!count);
+      setUploading2(false);
       console.log(data);
     }
   };
+
   return (
     <div className="w-full bg-[#F4F4F5] h-[319px] flex items-center justify-center">
-      {uploading ? (
+      {uploading2 ? (
         <div>
-          {user.profile?.backgroundImage && (
+          {
             <div>
               <Image
                 src={imagePreview}
@@ -95,7 +100,7 @@ export default function EditCover({ user, setCount, count }: Props) {
                 height={400}
               />
             </div>
-          )}
+          }
         </div>
       ) : (
         <div>
@@ -121,31 +126,38 @@ export default function EditCover({ user, setCount, count }: Props) {
             }}
             className="bg-black text-white"
           >
-            {" "}
             {uploading ? (
               <>
-                <AiOutlineLoading3Quarters className="animate-spin" />{" "}
+                <AiOutlineLoading3Quarters className="animate-spin" />
                 <div>Uploading</div>
               </>
             ) : (
               `Save Changes`
-            )}{" "}
+            )}
           </Button>
           <Button onClick={handleCancelCover} variant="outline">
             Cancel
           </Button>
         </div>
       ) : (
-        <label className="cursor-pointer absolute top-4 right-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg hover:bg-opacity-70">
-          <CameraIcon className="w-5 h-5 inline-block mr-2" />{" "}
-          {user.profile?.backgroundImage ? "Change cover" : "Add a cover image"}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={imageInput}
-            className="hidden"
-          />
-        </label>
+        <div>
+          {owner && (
+            <label className="cursor-pointer absolute top-4 right-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg hover:bg-opacity-70">
+              <CameraIcon className="w-5 h-5 inline-block mr-2" />{" "}
+              <div>
+                {user.profile?.backgroundImage
+                  ? "Change cover"
+                  : "Add a cover image"}
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={imageInput}
+                className="hidden"
+              />
+            </label>
+          )}
+        </div>
       )}
       {uploading && (
         <p className="absolute bottom-4 text-white text-sm">Uploading...</p>

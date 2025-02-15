@@ -231,10 +231,17 @@ export function ResetPassword() {
                 ) : (
                   <Button
                     onClick={changePassword}
-                    disabled={!isValidNewPassword}
+                    disabled={!isValidNewPassword || loading}
                     className="text-background"
                   >
-                    Save changes
+                    {loading ? (
+                      <div className="flex gap-2 items-center">
+                        <div>Please Wait</div>
+                        <AiOutlineLoading3Quarters className="animate-spin" />
+                      </div>
+                    ) : (
+                      <div>Save changes</div>
+                    )}
                   </Button>
                 )}
               </div>
@@ -243,7 +250,7 @@ export function ResetPassword() {
         )}
         {!userExist && (
           <Button
-            disabled={!valid}
+            disabled={!valid || loading}
             onClick={handleCheck}
             className="w-full text-background"
           >
