@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { CameraIcon } from "@heroicons/react/24/outline";
 import { CldImage } from "next-cloudinary";
 import EditProfile from "@/app/_components/EditProfile";
-type user = {
+import Image from "next/image";
+import { donation } from "@/app/utils/types";
+type profile = {
   id: string;
   name: string;
   about: string;
@@ -16,7 +18,9 @@ type user = {
 };
 type Props = {
   user: {
-    profile?: user;
+    recievedDonations?: donation[];
+    sendDonation?: donation[];
+    profile?: profile;
   };
   owner?: boolean;
 };
@@ -29,17 +33,16 @@ export default function FrameEditPage(props: Props) {
 
   return (
     <div className="max-w-[632px]">
-      <div className="bg-white border border-[#E4E4E7] rounded-lg p-6">
+      <div className="bg-background  border border-background  rounded-lg p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <div className="relative w-16 h-16 rounded-full overflow-hidden border border-gray-300">
-              {image ? (
-                <CldImage
-                  width="64"
-                  height="64"
-                  src={image}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
+              {props.user.profile?.avatarImage ? (
+                <Image
+                  src={`${props.user.profile?.avatarImage}`}
+                  width={100}
+                  height={100}
+                  alt={`pfp`}
                 />
               ) : (
                 <img
@@ -48,9 +51,8 @@ export default function FrameEditPage(props: Props) {
                   alt="Profile"
                 />
               )}
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 cursor-pointer">
+              <div className="absolute inset-0 flex items-center justify-center ">
                 <label className="cursor-pointer">
-                  <CameraIcon className="w-6 h-6 text-white" />
                   <input type="file" accept="image/*" className="hidden" />
                 </label>
               </div>
@@ -62,13 +64,13 @@ export default function FrameEditPage(props: Props) {
           {props.owner && (
             <button
               onClick={() => setIsOpen(true)}
-              className="mt-4 px-4 py-2 bg-[#F4F4F5] text-[#18181B] rounded-md"
+              className="mt-4 px-4 py-2 bg-background  text-[#18181B] rounded-md"
             >
               Edit Page
             </button>
           )}
         </div>
-        <div className="border-t border-[#E4E4E7] my-4"></div>
+        <div className="border-t border-background  my-4"></div>
         <div>
           <h2 className="text-lg font-semibold">
             About {props.user.profile?.name}
@@ -77,7 +79,7 @@ export default function FrameEditPage(props: Props) {
         </div>
       </div>
 
-      <div className="bg-white border border-[#E4E4E7] rounded-lg p-6">
+      <div className="bg-background border border-background rounded-lg p-6">
         <h2 className="text-lg font-semibold">
           {props.user.profile?.socialMediaURL}
         </h2>
@@ -91,14 +93,52 @@ export default function FrameEditPage(props: Props) {
       </div>
 
       {/* Supporters Section */}
-      <div className="bg-white border border-[#E4E4E7] rounded-lg p-6 text-center">
+      <div className="bg-background border border-background rounded-lg p-6 flex flex-col gap-4">
         <h3 className="text-lg font-semibold">Recent Supporters</h3>
-        <div className="bg-white border border-[#E4E4E7] rounded-lg p-6 text-center">
-          <p className="text-gray-500">Be the first one to support Jake ❤️</p>
-        </div>
+        {props.user.recievedDonations ? (
+          <div className="">
+            {props.user.recievedDonations?.length > 0 ? (
+              <div className="flex gap-5 flex-col ">
+                {props.user.recievedDonations.map((dono) => (
+                  <div className="flex whitespace-nowrap gap-3" key={dono.id}>
+                    <div>
+                      <Image
+                        src={`${dono.donor.profile.avatarImage}`}
+                        alt="wait"
+                        width={50}
+                        height={50}
+                      />
+                    </div>
+                    <div>
+                      <div className=" font-semibold">
+                        {dono.donor.profile.name} bought {dono.amount}$ coffee
+                      </div>
+                      <div>{dono.specialMessage}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white border border-[#E4E4E7] rounded-lg p-6 text-center">
+                <p className="text-gray-500">
+                  Be the first one to support Jake ❤️
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="bg-white border border-[#E4E4E7] rounded-lg p-6 text-center">
+            <p className="text-gray-500">Be the first one to support Jake ❤️</p>
+          </div>
+        )}
       </div>
-
-      <EditProfile isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      {props.user.profile && (
+        <EditProfile
+          profile={props.user.profile}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+        />
+      )}
     </div>
   );
 }

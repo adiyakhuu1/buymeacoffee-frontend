@@ -7,21 +7,11 @@ import FrameViewDonation from "../view-page/_components/FrameViewDonation";
 import { useParams } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { data } from "../dashboard/page";
+import { user } from "../utils/types";
 
 type response = {
   data: {
-    user: {
-      profile: {
-        id: string;
-        name: string;
-        about: string;
-        avatarImage: string;
-        socialMediaURL: string;
-        backgroundImage: null | string;
-        successMessage: string;
-        userId: string;
-      };
-    };
+    user: user;
   };
   success: boolean;
   owner: boolean;
@@ -77,9 +67,11 @@ export default function ViewPage() {
             {/* <div className="w-[1280px] flex justify-between pt-[238px]"> */}
             <div className="flex flex-col items-center xl:flex-row gap-20 absolute -top-10">
               {data?.data?.user && (
-                <FrameEditPage user={data.data.user} owner={owner} />
+                <>
+                  <FrameEditPage user={data.data.user} owner={owner} />
+                  <FrameViewDonation user={data.data.user} />
+                </>
               )}
-              <FrameViewDonation />
             </div>
             {/* </div> */}
           </div>

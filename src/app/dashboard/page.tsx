@@ -13,58 +13,31 @@ import {
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { donation, user } from "../utils/types";
 
-type donation = {
-  id: string;
-  amount: number;
-  specialMessage: string;
-  socialURLOrBuyMeACoffee: string;
-  createdAt: Date;
-  donor: user;
-};
-type user = {
-  id: string;
-  email: string;
-  password: string;
-  username: string;
-  profile: profile;
-  recievedDonations: donation[];
-  sendDonation: donation[];
-};
-type profile = {
-  id: string;
-  name: string;
-  about: string;
-  avatarImage: string;
-  socialMediaURL: string;
-  backgroundImage: string;
-  successMessage: string;
-  userId: string;
-};
 export type data = {
   user: user;
   success?: boolean;
   code?: string;
   earnings: {
-    day30earnings: number;
-    day60earnings: number;
-    day90earnings: number;
+    totalEarningsByDay: number;
   };
   earningsData: {
-    day30data: donation[];
-    day60data: donation[];
-    day90data: donation[];
+    DaysFilter: donation[];
   };
 };
 
 export default function EarningsDashboard() {
   const [user, setUser] = useState<data>();
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState({
+    days: 30,
+    amount: 10,
+  });
   const [donations, setDonations] = useState<donation[]>([]);
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/dashbordInfo`,
+        `${process.env.NEXT_PUBLIC_API_URL}/dashbordInfo/?days=${filter.days}&amount=${filter.amount}`,
         {
           credentials: "include",
         }
@@ -77,8 +50,9 @@ export default function EarningsDashboard() {
   }, []);
   useEffect(() => {
     if (user?.success) {
-      setDonations(user.earningsData.day30data);
+      setDonations(user.earningsData?.DaysFilter);
     }
+    console.log(filter);
   }, [filter, user]);
   return (
     <div className="h-screen">
@@ -103,7 +77,8 @@ export default function EarningsDashboard() {
                 </div>
                 <Button
                   variant="default"
-                  className="bg-black text-white px-8 py-3 text-lg">
+                  className="bg-black text-white px-8 py-3 text-lg"
+                >
                   Share page link
                 </Button>
               </div>
@@ -113,25 +88,54 @@ export default function EarningsDashboard() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="outline"
-                      className="flex items-center gap-2 text-lg px-4 py-2">
+                      className="flex items-center gap-2 text-lg px-4 py-2"
+                    >
+                      Last {filter.days} days
                       <ChevronDown className="w-5 h-5" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent defaultValue={`day30`} align="start">
-                    <DropdownMenuItem onClick={() => setFilter("day30data")}>
+                  <DropdownMenuContent defaultValue={filter.days} align="start">
+                    <DropdownMenuItem
+                      onClick={() =>
+                        setFilter((prev) => {
+                          return {
+                            ...prev,
+                            days: 30,
+                          };
+                        })
+                      }
+                    >
                       Last 30 days
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setFilter("day60data")}>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        setFilter((prev) => {
+                          return {
+                            ...prev,
+                            days: 60,
+                          };
+                        })
+                      }
+                    >
                       Last 60 days
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setFilter("day90data")}>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        setFilter((prev) => {
+                          return {
+                            ...prev,
+                            days: 90,
+                          };
+                        })
+                      }
+                    >
                       Last 90 days
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
               <p className="text-4xl font-extrabold mt-4">
-                ${user.earnings.day30earnings}
+                ${user.earnings?.totalEarningsByDay}
               </p>
             </CardContent>
           </Card>
@@ -142,13 +146,24 @@ export default function EarningsDashboard() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="flex items-center gap-2 text-lg px-4 py-2">
-                  Amount: $ <ChevronDown className="w-5 h-5" />
+                  className="flex items-center gap-2 text-lg px-4 py-2"
+                >
+                  Amount: ${filter.amount} <ChevronDown className="w-5 h-5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {[1, 2, 5, 10].map((amt) => (
-                  <DropdownMenuItem key={amt}>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setFilter((prev) => {
+                        return {
+                          ...prev,
+                          amount: amt,
+                        };
+                      });
+                    }}
+                    key={amt}
+                  >
                     <Checkbox />${amt}
                   </DropdownMenuItem>
                 ))}
@@ -164,7 +179,8 @@ export default function EarningsDashboard() {
                     {donations.map((donation, index) => (
                       <div
                         key={donation.donor.id + donation.id}
-                        className="flex pt-[24px] justify-between items-start px-[24px] pb-4 last:border-none">
+                        className="flex pt-[24px] justify-between items-start px-[24px] pb-4 last:border-none"
+                      >
                         <div>
                           <Link href={`/${donation.donor.id}`}>
                             <h1 className="text-lg font-semibold">
@@ -204,7 +220,8 @@ export default function EarningsDashboard() {
           ) : (
             <Link
               className="fixed transform top-1/2 left-1/2 bottom-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-extrabold text-2xl"
-              href={`/account/signin`}>
+              href={`/account/signin`}
+            >
               Please Login 💩
             </Link>
           )}

@@ -14,13 +14,17 @@ const forSchema = z.object({
   socialMediaURL: z.string().url(),
   avatarImage: z.string().url(),
 });
+type response = {
+  message: string;
+  success: boolean;
+};
 export default function PersonalInfo({ user }: Props) {
   const [avatarImage, setSelectedImage] = useState<string>(
     user.user.profile.avatarImage
   );
   const [loading, setLoading] = useState(false);
   const [isValid, setValid] = useState(true);
-  const [response, setResponse] = useState();
+  const [response, setResponse] = useState<response>();
   const [changed, setChanged] = useState<UserInfoForm>(user.user.profile);
   const inputRef = useRef<HTMLInputElement>(null);
   const handleClick = () => {
@@ -38,6 +42,7 @@ export default function PersonalInfo({ user }: Props) {
     console.log(isValid, result.success);
   }, [changed]);
   const imageInput = async (e: ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
     if (e.target.files) {
       const file = e.target.files[0];
       const formData = new FormData();
@@ -49,6 +54,7 @@ export default function PersonalInfo({ user }: Props) {
       });
       const response = await res.json();
       setSelectedImage(response.secure_url);
+      setLoading(false);
     }
   };
   const onChange = (
@@ -163,6 +169,11 @@ export default function PersonalInfo({ user }: Props) {
             `Save Changes`
           )}
         </Button>
+        <div>
+          {response?.message === "success" && (
+            <div className="text-green-500">Success</div>
+          )}
+        </div>
       </div>
     </div>
   );

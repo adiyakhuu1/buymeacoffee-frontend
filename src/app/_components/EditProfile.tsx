@@ -11,57 +11,75 @@ import {
 } from "@/components/ui/dialog";
 import { CameraIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
-import { CldImage } from "next-cloudinary";
+import Image from "next/image";
 
 interface EditProfileProps {
   isOpen: boolean;
   onClose: () => void;
+  profile: profile;
 }
-
-export default function EditProfile({ isOpen, onClose }: EditProfileProps) {
-  const [name, setName] = useState("Jake");
-  const [about, setAbout] = useState(
-    "I'm a typical person who enjoys exploring different things. I also make music art as a hobby. Follow me along."
-  );
-  const [socialUrl, setSocialUrl] = useState(
-    "https://buymeacoffee.com/baconpancakes1"
-  );
-  const [image, setImage] = useState<string | null>(null);
+type profile = {
+  id: string;
+  name: string;
+  about: string;
+  avatarImage: string;
+  socialMediaURL: string;
+  backgroundImage: null | string;
+  successMessage: string;
+  userId: string;
+};
+export default function EditProfile({
+  isOpen,
+  onClose,
+  profile,
+}: EditProfileProps) {
+  const [name, setName] = useState(profile.name);
+  const [about, setAbout] = useState(profile.about);
+  const [socialUrl, setSocialUrl] = useState(profile.socialMediaURL);
+  const [image, setImage] = useState<string>("");
+  const [response, setResponse] = useState();
   const [loading, setLoading] = useState(false);
 
-  const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append(
-      "upload_preset",
-      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!
-    );
-
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
 
-    try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-      setImage(data.secure_url);
-    } catch (error) {
-      console.error("Image upload failed:", error);
-    } finally {
-      setLoading(false);
+    if (e.target.files) {
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "qjhhbr3k");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}`, {
+        method: "POST",
+        body: formData,
+      });
+      const response = await res.json();
+      setImage(response.secure_url);
+      setLoading(true);
     }
   };
-
+  const sendData = async () => {
+    setLoading(true);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/profile/update`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name,
+          about,
+          socialMediaURL: socialUrl,
+          avatarImage: image,
+        }),
+      }
+    );
+    const respo = await res.json();
+    setResponse(respo);
+    console.log(respo);
+    setLoading(false);
+  };
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
@@ -77,15 +95,12 @@ export default function EditProfile({ isOpen, onClose }: EditProfileProps) {
         <div className="flex flex-col items-center">
           <div className="relative w-24 h-24 rounded-full overflow-hidden border border-gray-300">
             {image ? (
-              <CldImage
-                width="96"
-                height="96"
-                src={image}
-                alt="Profile"
+              <Image src={image} width={100} height={100} alt={`pfp`} />
+            ) : (
+              <img
+                src={`${profile.avatarImage}`}
                 className="w-full h-full object-cover"
               />
-            ) : (
-              <img src="Profile.png" className="w-full h-full object-cover" />
             )}
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 cursor-pointer">
               <label className="cursor-pointer">
@@ -108,7 +123,7 @@ export default function EditProfile({ isOpen, onClose }: EditProfileProps) {
           <label className="text-sm font-medium">Name</label>
           <input
             type="text"
-            value={name}
+            defaultValue={profile.name}
             onChange={(e) => setName(e.target.value)}
             className="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-gray-200 outline-none"
           />
@@ -117,17 +132,18 @@ export default function EditProfile({ isOpen, onClose }: EditProfileProps) {
         <div className="mt-4">
           <label className="text-sm font-medium">About</label>
           <textarea
-            value={about}
+            defaultValue={profile.about}
             onChange={(e) => setAbout(e.target.value)}
             className="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-gray-200 outline-none"
-            rows={3}></textarea>
+            rows={3}
+          ></textarea>
         </div>
 
         <div className="mt-4">
           <label className="text-sm font-medium">Social media URL</label>
           <input
             type="text"
-            value={socialUrl}
+            defaultValue={profile.socialMediaURL}
             onChange={(e) => setSocialUrl(e.target.value)}
             className="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-gray-200 outline-none"
           />
@@ -138,7 +154,9 @@ export default function EditProfile({ isOpen, onClose }: EditProfileProps) {
             Cancel
           </Button>
           <DialogClose asChild>
-            <Button variant="outline">Save changes</Button>
+            <Button onClick={sendData} variant="outline">
+              Save changes
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

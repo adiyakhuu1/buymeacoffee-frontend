@@ -119,7 +119,7 @@ export default function SignupStep2() {
           </div>
 
           <Button
-            disabled={!isValid()}
+            disabled={!isValid() || loading}
             onClick={(e) => {
               if (!isValid()) {
                 e.preventDefault();

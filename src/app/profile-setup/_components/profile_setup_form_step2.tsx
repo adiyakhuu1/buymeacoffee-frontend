@@ -17,8 +17,8 @@ type country = {
 
 const paymentSchema = z.object({
   country: z.string(),
-  firstName: z.string().min(6),
-  lastName: z.string().min(6),
+  firstName: z.string().min(3),
+  lastName: z.string().min(3),
   cardNumber: z.string().min(16),
   expiryDate: z.date(),
   CVC: z.string().max(3),
@@ -31,14 +31,20 @@ type PaymentInfo = {
   expiryDate?: Date;
   CVC: string;
 };
+type response = {
+  code: string;
+  success: boolean;
+  message: string;
+};
 export default function ProfileSetup2() {
   const router = useRouter();
   const [cardExpiryDate, setCardExpiryDate] = useState("");
   const [year, setYear] = useState("");
-  const [response, setMessage] = useState("");
+  const [response, setMessage] = useState<response>();
   const [month, setMonth] = useState("");
   const [countries, setCountries] = useState<country[]>([]);
   const [isValid, setValid] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [form2, setForm2] = useState<PaymentInfo>({
     country: "",
     firstName: "",
@@ -102,6 +108,7 @@ export default function ProfileSetup2() {
     setForm1(formL);
   }, []);
   const sendDatas = async () => {
+    setLoading(true);
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profile`, {
       method: "POST",
       credentials: "include",
@@ -110,7 +117,7 @@ export default function ProfileSetup2() {
     });
     const response = await res.json();
     console.log("profile response", response);
-
+    setMessage(response);
     const res2 = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bank-card`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -121,6 +128,7 @@ export default function ProfileSetup2() {
     });
     const response2 = await res2.json();
     console.log("card response", response2);
+    setLoading(false);
     if (response.message === "success" && response2.message === "success") {
       router.push(`/dashboard`);
     }
@@ -245,7 +253,7 @@ export default function ProfileSetup2() {
       </div>
       <div className="flex justify-end text-background">
         <Button
-          disabled={!isValid}
+          disabled={!isValid || loading}
           onClick={() => {
             sendDatas();
             console.log("it works");
@@ -255,6 +263,9 @@ export default function ProfileSetup2() {
           Continue
         </Button>
       </div>
+      {response?.code === "SUCCESS" && (
+        <div className=" text-green-500">Success</div>
+      )}
     </div>
   );
 }
