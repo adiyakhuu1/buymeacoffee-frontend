@@ -19,7 +19,6 @@ export type donation = {
 export type user = {
   id: string;
   email: string;
-  password: string;
   username: string;
   profile: profile;
   recievedDonations: donation[];

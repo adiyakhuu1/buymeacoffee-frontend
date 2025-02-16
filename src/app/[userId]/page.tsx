@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { data } from "../dashboard/page";
 import { user } from "../utils/types";
+import { DonationComplete } from "../explore/_components/DonationComplete";
 
 type response = {
   data: {
@@ -73,7 +74,6 @@ export default function ViewPage() {
                 </>
               )}
             </div>
-            {/* </div> */}
           </div>
         </div>
       )}

@@ -27,7 +27,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Suspense fallback={<div>Wait</div>}>{children}</Suspense>
+        <Suspense fallback={<div></div>}>{children}</Suspense>
       </body>
     </html>
   );

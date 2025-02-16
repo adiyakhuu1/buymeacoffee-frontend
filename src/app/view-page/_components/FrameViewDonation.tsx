@@ -1,5 +1,6 @@
 "use client";
 import { ProfileType } from "@/app/_typescript/ProfileType";
+import { DonationComplete } from "@/app/explore/_components/DonationComplete";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -25,6 +26,9 @@ type user = {
     userId: string;
   };
 };
+type response = {
+  success: boolean;
+};
 const donoSchema = z.object({
   amount: z.number().min(1),
   specialMessage: z.string().min(2),
@@ -40,7 +44,7 @@ export default function FrameViewDonation(props: Props) {
     socialURLOrBuyMeACoffee: "",
     recipentId,
   });
-  const [response, setReponse] = useState();
+  const [response, setReponse] = useState<response>();
   const [isValid, setisValid] = useState(true);
   useEffect(() => {
     const result = donoSchema.safeParse(form);
@@ -84,64 +88,72 @@ export default function FrameViewDonation(props: Props) {
   };
 
   return (
-    <div className="max-w-lg bg-white border border-gray-300 rounded-lg p-6 z-3">
-      <h2 className="text-xl font-semibold mb-4">
-        Buy "{props.user.profile.name}" a Coffee
-      </h2>
-
-      <div className="mb-4">
-        <h3 className="text-sm font-medium">Select amount:</h3>
-        <div className="flex gap-2 mt-2">
-          {[1, 2, 5, 10].map((amount) => (
-            <button
-              onClick={() => {
-                setForm((prev) => {
-                  return {
-                    ...prev,
-                    amount,
-                  };
-                });
-              }}
-              key={amount}
-              className="px-4 py-2 flex items-center gap-2 border rounded-lg hover:bg-gray-100 focus:ring-2 focus:ring-gray-300"
-            >
-              ☕ ${amount}
-            </button>
-          ))}
+    <>
+      {response?.success ? (
+        <div className=" w-full min-h-screen fixed transform top-1/2 left-1/2 bottom-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-background justify-items-center content-center">
+          <DonationComplete user={props.user} />
         </div>
-      </div>
+      ) : (
+        <div className="max-w-lg bg-white border border-gray-300 rounded-lg p-6 z-3">
+          <h2 className="text-xl font-semibold mb-4">
+            Buy "{props.user.profile.name}" a Coffee
+          </h2>
 
-      <div className="mb-4">
-        <label className="text-sm font-medium">
-          Enter BuyMeCoffee or social account URL:
-        </label>
-        <input
-          name="socialURLOrBuyMeACoffee"
-          onChange={handleChange}
-          type="text"
-          placeholder="buymeacoffee.com/"
-          className="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-gray-200 outline-none"
-        />
-      </div>
+          <div className="mb-4">
+            <h3 className="text-sm font-medium">Select amount:</h3>
+            <div className="flex gap-2 mt-2">
+              {[1, 2, 5, 10].map((amount) => (
+                <button
+                  onClick={() => {
+                    setForm((prev) => {
+                      return {
+                        ...prev,
+                        amount,
+                      };
+                    });
+                  }}
+                  key={amount}
+                  className="px-4 py-2 flex items-center gap-2 border rounded-lg hover:bg-gray-100 focus:ring-2 focus:ring-gray-300"
+                >
+                  ☕ ${amount}
+                </button>
+              ))}
+            </div>
+          </div>
 
-      <div className="mb-4">
-        <label className="text-sm font-medium">Special message:</label>
-        <textarea
-          name="specialMessage"
-          onChange={handleChange}
-          placeholder="Please write your message here"
-          className="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-gray-200 outline-none"
-          rows={3}
-        ></textarea>
-      </div>
+          <div className="mb-4">
+            <label className="text-sm font-medium">
+              Enter BuyMeCoffee or social account URL:
+            </label>
+            <input
+              name="socialURLOrBuyMeACoffee"
+              onChange={handleChange}
+              type="text"
+              placeholder="buymeacoffee.com/"
+              className="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-gray-200 outline-none"
+            />
+          </div>
 
-      <Button
-        onClick={sendDono}
-        className="w-full py-2 rounded-lg text-background"
-        disabled={isValid}
-      >
-        Support
-      </Button>
-    </div>
+          <div className="mb-4">
+            <label className="text-sm font-medium">Special message:</label>
+            <textarea
+              name="specialMessage"
+              onChange={handleChange}
+              placeholder="Please write your message here"
+              className="w-full mt-1 p-2 border rounded-lg focus:ring focus:ring-gray-200 outline-none"
+              rows={3}
+            ></textarea>
+          </div>
+
+          <Button
+            onClick={sendDono}
+            className="w-full py-2 rounded-lg text-background"
+            disabled={isValid}
+          >
+            Support
+          </Button>
+        </div>
+      )}
+    </>
   );
 }

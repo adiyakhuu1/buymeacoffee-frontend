@@ -1,46 +1,56 @@
-
-import { Navigation } from "../../_components/Navigation"
-import { FaRegCircleCheck } from "react-icons/fa6";
-import { NavigationProfile } from "../../_components/NavigationProfile";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import Link from "next/link";
-
-
-export function DonationComplete () {
-    return (
-        <div className="">
-           <NavigationProfile/>
-           <div className="flex justify-center  items-center mt-[133px]">
-
-            <div className="w-[696px] h-[311px] p-[24px]">
-                <div className="w-[648px] h-[108px] pl-[24px]">
-                    
-                    <div className="w-[64px] h-[64px] rounded-full bg-[#18BA51] ml-[280px] mr-[292px]">
-                        <div className=" text-white pt-[2px]">
-                        <FaRegCircleCheck className="w-[29px] h-[29px] m-[17px] "/> 
-                        <div className="pr-[-50px]">
-                        <p className=" w-[448px] h-[24px] font-semibold text-base text-black ml-[-40px] pt-[20px]">Donation Complete !</p>
-                        </div>
-
-                        </div>
-                    </div>
-                </div >
-                    <div className="border-[#E4E4E7] border rounded-md h-[140px] mt-[24px] w-[510px] ml-[93px]">
-                        <div className="flex pl-[12px] pt-[8px] pb-[8px] gap-[8px]">
-                        <img src="SpaceRangerAvatar.png" alt="" className="w-[32px] h-[32px]" />
-                        <p className="font-medium text-sm pt-[6px]">Space Ranger:</p>
-
-                        </div>
-                        <p className="font-normal text-sm pl-[12px]  ">Thank you for supporting me! It means a lot to have your support. It’s a step toward creating a more inclusive and accepting community of <br /> artists.</p>
-                    </div>
-                </div>
-            </div>
-            <div className="flex justify-center">
-                   <Link href="/explore">
-                      <button className="bg-black text-white w-[148px] h-[40px] rounded-md mt-[40px] ml-[30px] hover:bg-gray-800">Return to explore</button>
-                   </Link>
-
-            </div>
-           </div>
-
-    )
+type user = {
+  id: string;
+  email: string;
+  username: string;
+  bankCard: string;
+  profile: {
+    id: string;
+    name: string;
+    about: string;
+    avatarImage: string;
+    socialMediaURL: string;
+    backgroundImage: null | string;
+    successMessage: string;
+    userId: string;
+  };
+};
+export function DonationComplete(props: { user: user }) {
+  return (
+    <div className="flex flex-col gap-20 h-64 w-1/2 bg-background rounded-lg">
+      <div className="whitespace-nowrap items-center flex flex-col gap-5">
+        <div className=" content-center justify-items-center">
+          <div className="w-16 h-16 bg-green-600 rounded-full flex justify-center items-center">
+            <Image
+              src={`/img/check-circle-2.svg`}
+              width={30}
+              height={30}
+              alt="checkmark"
+              className=""
+            />
+          </div>
+          <div>Donation complete</div>
+        </div>
+        <div className=" whitespace-nowrap w-1/2 justify-start flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <Image
+              src={`${props.user.profile.avatarImage}`}
+              width={40}
+              height={40}
+              alt="avatar"
+            />
+            <h1 className="font-bold">{props.user.profile.name}:</h1>
+          </div>
+          <p>"{props.user.profile.successMessage}"</p>
+        </div>
+        <div>
+          <Link href={`/explore`}>
+            <Button className="text-background">Explore</Button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 }
