@@ -56,17 +56,14 @@ export default function EarningsDashboard() {
     if (user?.success) {
       setDonations(user.earningsDataByDay.DaysFilter);
     }
-    console.log(filter);
+    // console.log(filter);
   }, [filter, user]);
   return (
     <>
       {user && (
         <>
-          <Loading />
           {loading ? (
-            <div className="fixed transform top-1/2 left-1/2 bottom-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2  whitespace-nowrap font-extrabold text-2xl">
-              Please Wait...
-            </div>
+            <Loading />
           ) : (
             <div className="h-screen">
               {user?.success ? (
@@ -90,7 +87,8 @@ export default function EarningsDashboard() {
                         </div>
                         <Button
                           variant="default"
-                          className="bg-black text-white px-8 py-3 text-lg">
+                          className="bg-black text-white px-8 py-3 text-lg"
+                        >
                           Share page link
                         </Button>
                       </div>
@@ -100,14 +98,16 @@ export default function EarningsDashboard() {
                           <DropdownMenuTrigger asChild>
                             <Button
                               variant="outline"
-                              className="flex items-center gap-2 text-lg px-4 py-2">
+                              className="flex items-center gap-2 text-lg px-4 py-2"
+                            >
                               Last {filter.days} days
                               <ChevronDown className="w-5 h-5" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent
                             defaultValue={filter.days}
-                            align="start">
+                            align="start"
+                          >
                             <DropdownMenuItem
                               onClick={() =>
                                 setFilter((prev) => {
@@ -116,7 +116,8 @@ export default function EarningsDashboard() {
                                     days: 30,
                                   };
                                 })
-                              }>
+                              }
+                            >
                               Last 30 days
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -127,7 +128,8 @@ export default function EarningsDashboard() {
                                     days: 60,
                                   };
                                 })
-                              }>
+                              }
+                            >
                               Last 60 days
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -138,7 +140,8 @@ export default function EarningsDashboard() {
                                     days: 90,
                                   };
                                 })
-                              }>
+                              }
+                            >
                               Last 90 days
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -158,7 +161,8 @@ export default function EarningsDashboard() {
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="outline"
-                          className="flex items-center gap-2 text-lg px-4 py-2">
+                          className="flex items-center gap-2 text-lg px-4 py-2"
+                        >
                           Amount: ${filter.amount}{" "}
                           <ChevronDown className="w-5 h-5" />
                         </Button>
@@ -174,7 +178,8 @@ export default function EarningsDashboard() {
                                 };
                               });
                             }}
-                            key={amt}>
+                            key={amt}
+                          >
                             <Checkbox />${amt}
                           </DropdownMenuItem>
                         ))}
@@ -190,7 +195,8 @@ export default function EarningsDashboard() {
                             {donations.map((donation, index) => (
                               <div
                                 key={donation.donor.id + donation.id}
-                                className="flex pt-[24px] justify-between items-start px-[24px] pb-4 last:border-none">
+                                className="flex pt-[24px] justify-between items-start px-[24px] pb-4 last:border-none"
+                              >
                                 <div>
                                   <Link href={`/${donation.donor.id}`}>
                                     <h1 className="text-lg font-semibold">
@@ -230,7 +236,8 @@ export default function EarningsDashboard() {
                   {user?.code !== `JWT_EXPIRED` && (
                     <Link
                       className="fixed transform top-1/2 left-1/2 bottom-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-extrabold text-2xl"
-                      href={`/account/signin`}>
+                      href={`/account/signin`}
+                    >
                       Please Login 💩
                     </Link>
                   )}

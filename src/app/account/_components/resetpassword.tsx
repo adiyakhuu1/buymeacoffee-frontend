@@ -1,4 +1,5 @@
 "use client";
+import { Loading } from "@/app/_components/loading";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -88,21 +89,21 @@ export function ResetPassword() {
       const data = await res.json();
       setresponse(data);
       setLoading(false);
-      console.log("step 1 data", data);
+      // console.log("step 1 data", data);
       if (data.success) {
         setuserExist(true);
         if (data?.id) {
           setOtpId(data?.id);
         }
       }
-      console.log(data);
+      // console.log(data);
     } catch (e) {
       console.error(e, "aldaa");
     }
   };
   const changePassword = async () => {
     setLoading(true);
-    console.log({ otp, email, otpId });
+    // console.log({ otp, email, otpId });
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/users/auth/reset/change-password`,
@@ -127,7 +128,7 @@ export function ResetPassword() {
         setOtpState(true);
       }
 
-      console.log(data);
+      // console.log(data);
     } catch (e) {
       console.error(e, "aldaa");
     }
@@ -185,7 +186,8 @@ export function ResetPassword() {
               <div
                 className={`${
                   response?.success ? `text-green-500` : `text-red-500`
-                }`}>
+                }`}
+              >
                 {response?.message === "OTP_MATCHED" && "OTP Matched"}
                 {response?.message === "OTP_NOT_MATCHED" && "OTP didn't match"}
               </div>
@@ -233,10 +235,11 @@ export function ResetPassword() {
                   <Button
                     onClick={changePassword}
                     disabled={!isValidNewPassword || loading}
-                    className="text-background">
+                    className="text-background"
+                  >
                     {loading ? (
                       <div className="flex gap-2 items-center">
-                        <div>Please Wait</div>
+                        <Loading />
                         <AiOutlineLoading3Quarters className="animate-spin" />
                       </div>
                     ) : (
@@ -252,7 +255,8 @@ export function ResetPassword() {
           <Button
             disabled={!valid || loading}
             onClick={handleCheck}
-            className="w-full text-background">
+            className="w-full text-background"
+          >
             Send Code
             {loading && <AiOutlineLoading3Quarters className="animate-spin" />}
           </Button>

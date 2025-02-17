@@ -1,6 +1,8 @@
 "use client";
+import { Loading } from "@/app/_components/loading";
 import { ProfileType } from "@/app/_typescript/ProfileType";
 import { DonationComplete } from "@/app/explore/_components/DonationComplete";
+import { bankcard } from "@/app/utils/types";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -14,7 +16,7 @@ type user = {
   id: string;
   email: string;
   username: string;
-  bankCard: string;
+  bankCard: bankcard;
   profile: {
     id: string;
     name: string;
@@ -46,6 +48,7 @@ export default function FrameViewDonation(props: Props) {
   });
   const [response, setReponse] = useState<response>();
   const [isValid, setisValid] = useState(true);
+  const [loading, setLooading] = useState(false);
   useEffect(() => {
     const result = donoSchema.safeParse(form);
     if (result.success) {
@@ -53,7 +56,7 @@ export default function FrameViewDonation(props: Props) {
     } else {
       setisValid(true);
     }
-    console.log(result);
+    // console.log(result);
   }, [form]);
 
   const handleChange = (
@@ -68,9 +71,10 @@ export default function FrameViewDonation(props: Props) {
       };
     });
   };
-  console.log(form);
+  // console.log(form);
 
   const sendDono = async () => {
+    setLooading(true);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/donation/create-donation`,
       {
@@ -84,11 +88,14 @@ export default function FrameViewDonation(props: Props) {
     );
     const respo = await res.json();
     setReponse(respo);
-    console.log(respo);
+    setLooading(false);
+
+    // console.log(respo);
   };
 
   return (
     <>
+      {loading && <Loading />}
       {response?.success ? (
         <div className=" w-full min-h-screen fixed transform top-1/2 left-1/2 bottom-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-background justify-items-center content-center">
           <DonationComplete user={props.user} />

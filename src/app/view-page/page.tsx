@@ -9,6 +9,7 @@ import { data } from "../dashboard/page";
 import { response } from "../account/signin/page";
 import Link from "next/link";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Loading } from "../_components/loading";
 
 export default function ViewPage() {
   const [response, setResponse] = useState<data>();
@@ -16,8 +17,6 @@ export default function ViewPage() {
   const router = useRouter();
   const [count, setCount] = useState(false);
 
-  const params = useParams();
-  const { userId } = params;
   useEffect(() => {
     setwaitingfordata(true);
     const fetchData = async () => {
@@ -31,15 +30,15 @@ export default function ViewPage() {
       if (data.success) {
         router.push(`/${data.user.id}`);
       } else {
-        router.push(`/dashboard}`);
+        router.push(`/dashboard`);
       }
+      setwaitingfordata(false);
     };
     fetchData();
   }, [count]);
   return (
-    <div className=" whitespace-nowrap flex items-center gap-3 fixed transform top-1/2 left-1/2 right-1/2 bottom-1/2 -translate-x-1/2 -translate-y-1/2">
-      <AiOutlineLoading3Quarters className="animate-spin" />
-      <div className="animate-pulse">Please wait!</div>
+    <div>
+      <Loading />
     </div>
   );
 }

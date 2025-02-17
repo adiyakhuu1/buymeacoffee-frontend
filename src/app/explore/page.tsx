@@ -9,29 +9,35 @@ import { NoCreator } from "./_components/NoCreator";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import { Loading } from "../_components/loading";
 
 export default function ExploreContainer() {
   const [ExploreData, setExploreData] = useState<ProfileType[]>([]);
   const [searchValue, setSearchValue] = useState("");
+  const [loading, setLoading] = useState(false);
   const debounceSearch = useDebounce(searchValue);
-  console.log(ExploreData);
+  // console.log(ExploreData);
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/profile/explore?search=${debounceSearch}`,
         { method: "GET", credentials: "include" }
       );
       const data = await response.json();
       setExploreData(data);
+      setLoading(false);
     };
     fetchData();
   }, [debounceSearch]);
   return (
     <div className="w-[80%]">
+      {loading && <Loading />}
+
       <div className="text-[#18181B] text-[1.3rem] font-[600] pb-[24px]">
         Explore creators
       </div>
@@ -47,7 +53,8 @@ export default function ExploreContainer() {
         ExploreData.map((item: ProfileType) => (
           <div
             key={`explore-${item?.id}`}
-            className="border-solid border-[#E4E4E7] border-[1px] rounded-lg mb-[24px]">
+            className="border-solid border-[#E4E4E7] border-[1px] rounded-lg mb-[24px]"
+          >
             <div className="p-[24px]">
               <div className="flex justify-between">
                 <div className="flex items-center gap-3 pb-[12px]">
@@ -74,10 +81,11 @@ export default function ExploreContainer() {
                   </div>
                 </div>
                 <div className="text-end ">
-                  <Link href={`/explore/${item.userId}`}>
+                  <Link href={`/${item.userId}`}>
                     <Button
                       variant={"outline"}
-                      className="bg-gray-100 border-none w-[136px] h-[40px]  hover:text-white hover:bg-black">
+                      className="bg-gray-100 border-none w-[136px] h-[40px]  hover:text-white hover:bg-black"
+                    >
                       View profile
                       <ExternalLink />
                     </Button>

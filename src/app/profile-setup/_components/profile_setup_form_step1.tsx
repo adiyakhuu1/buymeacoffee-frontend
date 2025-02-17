@@ -107,7 +107,7 @@ export default function ProfileSetup1() {
         },
       });
     }
-    console.log(validationResult);
+    // console.log(validationResult);
   }, [form]);
 
   const handleInput = () => {
@@ -132,7 +132,7 @@ export default function ProfileSetup1() {
           avatarImage: response.secure_url,
         };
       });
-      console.log(form);
+      // console.log(form);
     }
   };
   // useEffect(() => {
@@ -173,7 +173,7 @@ export default function ProfileSetup1() {
             >
               Add image
             </div>
-            {check && (
+            {form.avatarImage && (
               <div className="text-red-500 whitespace-nowrap">
                 {validationResult.errors.avatarImage && (
                   <p>Please upload profile picture!</p>
@@ -215,7 +215,7 @@ export default function ProfileSetup1() {
             placeholder="Enter your name here"
             className={`h-10 `}
           />
-          {check && (
+          {form.name && (
             <div className="text-red-500">
               {validationResult.errors.name && !isValid && (
                 <p>username must be 8+ characters!</p>
@@ -232,10 +232,10 @@ export default function ProfileSetup1() {
             className={`border h-[130px] `}
             placeholder="Write about yourself here"
           />
-          {check && (
+          {form.about && (
             <div className="text-red-500">
               {validationResult.errors.about && (
-                <p>Please enter info about yourself!</p>
+                <p>Please enter info about yourself! 15+ characters needed</p>
               )}
             </div>
           )}
@@ -249,7 +249,7 @@ export default function ProfileSetup1() {
             defaultValue={form.socialMediaURL}
             placeholder="https://"
           />
-          {check && (
+          {form.socialMediaURL && (
             <div className="text-red-500">
               {validationResult.errors.socialMediaURL && (
                 <p>Please enter a valid social link!</p>
@@ -286,7 +286,7 @@ export default function ProfileSetup1() {
         <Button
           className={`w-[236px] ${
             !isValid
-              ? `bg-muted text-background cursor-not-allowed hover:text-background hover:bg-muted-foreground`
+              ? `text-background cursor-not-allowed hover:text-background hover:bg-muted-foreground`
               : `bg-foreground text-background`
           }`}
           disabled={!isValid || loading}
@@ -294,17 +294,9 @@ export default function ProfileSetup1() {
             if (isValid && !loading) {
               setCheck(false);
               router.push(`/profile-setup?step=2`);
-              console.log("validate", isValid);
-              console.log("loading", loading);
-              console.log("working");
-              console.log(validationResult.errors);
             } else {
               e.preventDefault();
               setCheck(true);
-              console.log("validate", isValid);
-              console.log("loading", loading);
-              console.log("pervented");
-              console.log(validationResult.errors);
             }
           }}
         >

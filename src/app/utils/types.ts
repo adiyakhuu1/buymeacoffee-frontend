@@ -23,7 +23,7 @@ export type user = {
   profile: profile;
   recievedDonations: donation[];
   sendDonation: donation[];
-  bankCard: string;
+  bankCard: bankcard;
 };
 export type profile = {
   id: string;
@@ -34,4 +34,13 @@ export type profile = {
   backgroundImage: string;
   successMessage: string;
   userId: string;
+};
+export type bankcard = {
+  country: String;
+  firstName: String;
+  lastName: String;
+  cardNumber: String;
+  expiryDate: Date;
+  CVC: String;
+  user?: user;
 };

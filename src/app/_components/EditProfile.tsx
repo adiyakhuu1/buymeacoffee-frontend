@@ -77,7 +77,7 @@ export default function EditProfile({
     );
     const respo = await res.json();
     setResponse(respo);
-    console.log(respo);
+    // console.log(respo);
     setLoading(false);
   };
   return (

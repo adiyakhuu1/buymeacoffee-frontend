@@ -5,6 +5,7 @@ import z from "zod";
 import { UserInfoForm } from "../utils/types";
 import { Button } from "@/components/ui/button";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Loading } from "../_components/loading";
 type Props = {
   user: data;
 };
@@ -39,7 +40,7 @@ export default function PersonalInfo({ user }: Props) {
     } else {
       setValid(true);
     }
-    console.log(isValid, result.success);
+    // console.log(isValid, result.success);
   }, [changed]);
   const imageInput = async (e: ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
@@ -68,7 +69,7 @@ export default function PersonalInfo({ user }: Props) {
         [name]: value,
       };
     });
-    console.log("changed", changed);
+    // console.log("changed", changed);
   };
   const sendData = async () => {
     setLoading(true);
@@ -89,7 +90,7 @@ export default function PersonalInfo({ user }: Props) {
     const resp = await res.json();
     setResponse(resp);
     setLoading(false);
-    console.log(resp);
+    // console.log(resp);
   };
   return (
     <div>
@@ -153,7 +154,7 @@ export default function PersonalInfo({ user }: Props) {
         />
         <Button
           onClick={() => {
-            console.log("still working");
+            // console.log("still working");
             sendData();
           }}
           disabled={isValid || loading}
@@ -161,8 +162,7 @@ export default function PersonalInfo({ user }: Props) {
         >
           {loading ? (
             <div className="flex gap-2">
-              <div>Please Wait</div>
-
+              <Loading />
               <AiOutlineLoading3Quarters className="animate-spin" />
             </div>
           ) : (

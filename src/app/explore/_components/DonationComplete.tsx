@@ -1,3 +1,4 @@
+import { bankcard } from "@/app/utils/types";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -5,7 +6,7 @@ type user = {
   id: string;
   email: string;
   username: string;
-  bankCard: string;
+  bankCard: bankcard;
   profile: {
     id: string;
     name: string;

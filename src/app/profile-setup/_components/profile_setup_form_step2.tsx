@@ -7,7 +7,8 @@ import { UserInfoForm } from "../../utils/types";
 import { z } from "zod";
 import { form } from "@/app/account/_components/step1";
 import { useRouter } from "next/navigation";
-type country = {
+import { Loading } from "@/app/_components/loading";
+export type country = {
   name: {
     common: string;
   };
@@ -46,7 +47,7 @@ export default function ProfileSetup2() {
   const [isValid, setValid] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [form2, setForm2] = useState<PaymentInfo>({
-    country: "",
+    country: "Mongolia",
     firstName: "",
     lastName: "",
     cardNumber: "",
@@ -78,7 +79,7 @@ export default function ProfileSetup2() {
     } else {
       setValid(false);
     }
-    console.log(result);
+    // console.log(result);
   }, [form2]);
   useEffect(() => {
     const fetchData = async () => {
@@ -100,7 +101,7 @@ export default function ProfileSetup2() {
         expiryDate: new Date(year + "-" + month + "-" + "15"),
       };
     });
-    console.log(form2);
+    // console.log(form2);
   };
   useEffect(() => {
     const formString = localStorage.getItem("step1");
@@ -116,7 +117,7 @@ export default function ProfileSetup2() {
       body: JSON.stringify(form1),
     });
     const response = await res.json();
-    console.log("profile response", response);
+    // console.log("profile response", response);
     setMessage(response);
     const res2 = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bank-card`, {
       method: "POST",
@@ -127,7 +128,7 @@ export default function ProfileSetup2() {
       }),
     });
     const response2 = await res2.json();
-    console.log("card response", response2);
+    // console.log("card response", response2);
     setLoading(false);
     if (response.message === "success" && response2.message === "success") {
       router.push(`/dashboard`);
@@ -144,7 +145,7 @@ export default function ProfileSetup2() {
   //   }
   //   console.log(date);
   // }, [month, year]);
-  console.log(form2);
+  // console.log(form2);
   return (
     <div className="w-[510px] h-[631px] flex flex-col gap-10">
       <div>
@@ -158,6 +159,7 @@ export default function ProfileSetup2() {
           <label htmlFor="countries">Select country</label>
           <select
             onChange={handleChange}
+            defaultValue={"Mongolia"}
             name="country"
             id="countries"
             className="w-full border p-2 rounded-md"
@@ -256,13 +258,14 @@ export default function ProfileSetup2() {
           disabled={!isValid || loading}
           onClick={() => {
             sendDatas();
-            console.log("it works");
+            // console.log("it works");
           }}
           className={``}
         >
           Continue
         </Button>
       </div>
+      {loading && <Loading />}
       {response?.code === "SUCCESS" && (
         <div className=" text-green-500">Success</div>
       )}

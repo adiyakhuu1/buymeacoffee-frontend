@@ -7,6 +7,7 @@ import SuccessPage from "./SuccessPage";
 import { data } from "../dashboard/page";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Loading } from "../_components/loading";
 type response = {
   success?: boolean;
   message?: string;
@@ -17,9 +18,11 @@ export default function Settings() {
   const router = useRouter();
   const [user, setUser] = useState<data>();
   const [response, setresponse] = useState<response>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/dashbordInfo`,
         {
@@ -29,7 +32,7 @@ export default function Settings() {
       const data = await res.json();
       setUser(data);
       setresponse(data);
-      console.log(data);
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -41,6 +44,7 @@ export default function Settings() {
   }, [response]);
   return user?.success ? (
     <div className="w-[650px] ">
+      {loading && <Loading />}
       <div className=" mb-[20px]  text-black font-semibold text-[24px]">
         My account
       </div>
@@ -53,14 +57,15 @@ export default function Settings() {
     </div>
   ) : (
     <div>
-      {user?.code !== `JWT_EXPIRED` ? (
+      {user?.code !== `NO_TOKEN` ? (
         <div className="fixed transform top-1/2 left-1/2 bottom-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2  whitespace-nowrap font-extrabold text-2xl">
           Please Wait...
         </div>
       ) : (
         <Link
           className="fixed transform top-1/2 left-1/2 bottom-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-extrabold text-2xl"
-          href={`/account/signin`}>
+          href={`/account/signin`}
+        >
           Please Login 💩
         </Link>
       )}

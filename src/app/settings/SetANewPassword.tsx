@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useRouter } from "next/navigation";
+import { Loading } from "../_components/loading";
 type Props = {
   user: data;
 };
@@ -74,7 +75,7 @@ export default function SetSNewPassword(props: Props) {
     if (response.success) {
       setOpenDialog(true);
     }
-    console.log(response);
+    // console.log(response);
     setLoading(false);
   };
   const CheckOTP = async () => {
@@ -93,12 +94,12 @@ export default function SetSNewPassword(props: Props) {
       }
     );
     const response = await res.json();
-    console.log(response);
+    // console.log(response);
     setresponse(response);
 
     setLoading(false);
   };
-  console.log(password);
+  // console.log(password);
   return (
     <div className="w-[650px] min-h-[350px] text-black gap-1 p-[24px] flex flex-col rounded-[9px] border-[#E4E4E7] border-[1px] ">
       <h1 className="font-bold text-[16px] pb-5">Set a new password</h1>
@@ -141,7 +142,7 @@ export default function SetSNewPassword(props: Props) {
           >
             {loading ? (
               <div className=" flex gap-3">
-                <div>Please Wait.. </div>
+                <Loading />
                 <AiOutlineLoading3Quarters className="animate-spin" />
               </div>
             ) : (

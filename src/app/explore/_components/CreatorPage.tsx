@@ -9,8 +9,8 @@ export function CreatorPage() {
 
   const { id } = useParams();
 
-  console.log("profileData", profileData);
-  console.log("id", id);
+  // console.log("profileData", profileData);
+  // console.log("id", id);
 
   useEffect(() => {
     const fetchData = async () => {

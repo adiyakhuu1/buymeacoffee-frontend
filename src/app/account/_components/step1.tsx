@@ -1,4 +1,5 @@
 "use client";
+import { Loading } from "@/app/_components/loading";
 import { Skeleton } from "@/app/_components/Skeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,7 +48,7 @@ export default function SignupStep1() {
   };
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    setLoading(true);
+
     setResponse({ message: "" });
     if (form.username) {
       timeout = setTimeout(async () => {
@@ -61,8 +62,7 @@ export default function SignupStep1() {
         );
         const response = await send.json();
         setResponse(response);
-        setLoading(false);
-      }, 2000);
+      }, 1000);
     }
     return () => {
       clearTimeout(timeout);
@@ -75,7 +75,7 @@ export default function SignupStep1() {
   const save = () => {
     localStorage.setItem("signup-info", JSON.stringify(form));
   };
-  console.log(form);
+  // console.log(form);
   return (
     <div className="relative min-h-screen w-full">
       <div className="flex justify-end p-10">
@@ -120,14 +120,19 @@ export default function SignupStep1() {
                   : response?.yes
                   ? "text-green-400"
                   : "text-gray-300"
-              }`}>
+              }`}
+            >
               {response?.message}
             </div>
           ) : (
-            <div className="flex items-center gap-3">
-              <AiOutlineLoading3Quarters className="animate-spin" />
-              <div className="animate-pulse">Checking</div>
-            </div>
+            <>
+              {form.username && (
+                <div className="flex items-center gap-3">
+                  <AiOutlineLoading3Quarters className="animate-spin" />
+                  <div className="animate-pulse">Checking</div>
+                </div>
+              )}
+            </>
           )}
         </div>
 
@@ -141,10 +146,12 @@ export default function SignupStep1() {
             }
           }}
           disabled={form.username.length < 6 || !response?.yes}
-          className="w-full text-background">
+          className="w-full text-background"
+        >
           Continue
         </Button>
       </div>
+      {loading && <Loading />}
     </div>
   );
 }

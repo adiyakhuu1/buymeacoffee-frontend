@@ -7,6 +7,7 @@ import { user } from "@/app/utils/types";
 import EditCover from "@/app/view-page/_components/EditCover";
 import FrameEditPage from "@/app/view-page/_components/FrameEditPage";
 import FrameViewDonation from "@/app/view-page/_components/FrameViewDonation";
+import { Loading } from "../_components/loading";
 
 type response = {
   data: {
@@ -37,19 +38,13 @@ export default function ViewPage() {
       setData(data);
       setOwner(data.owner);
       setLoading(false);
-      console.log(data);
     };
     fetchData();
   }, [count]);
   return (
     <>
       {loading ? (
-        <div className="fixed top-1/2 left-1/2 right-1/2 bottom-1/2 -translate-x-1/2 -translate-y-1/2 transform">
-          <div className="flex items-center gap-2 whitespace-nowrap">
-            <div>Please wait</div>
-            <AiOutlineLoading3Quarters className="animate-spin" />
-          </div>
-        </div>
+        <Loading />
       ) : (
         <div className="">
           <div className="relative">

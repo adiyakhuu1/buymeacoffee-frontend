@@ -15,7 +15,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ResetPassword } from "../_components/resetpassword";
+import { Loading } from "@/app/_components/loading";
 export type response = {
+  code?: string;
   message: string;
   success?: boolean;
   profileSetup?: boolean;
@@ -76,7 +78,7 @@ export default function Signin() {
       // setnoreponse(e.message);
     }
   };
-  console.log(responses);
+  // console.log(responses);
   return (
     <div className="relative min-h-screen w-full">
       <div className="flex justify-end p-10">
@@ -116,8 +118,15 @@ export default function Signin() {
             sendData();
             setisResponded(true);
           }}
-          className="w-full text-background">
-          {isLoading ? <div>Please Wait</div> : <div>Continue</div>}
+          className="w-full text-background"
+        >
+          {isLoading ? (
+            <>
+              <Loading /> Please Wait!
+            </>
+          ) : (
+            <div>Continue</div>
+          )}
         </Button>
         <Dialog>
           <DialogTrigger>Forgot Password?</DialogTrigger>

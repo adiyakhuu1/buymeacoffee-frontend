@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { CldImage } from "next-cloudinary";
 import Image from "next/image";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Loading } from "@/app/_components/loading";
 
 // type EditCoverProps = {
 
@@ -38,12 +39,13 @@ type Props = {
   owner?: boolean;
 };
 export default function EditCover({ user, setCount, count, owner }: Props) {
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState();
   const [imagePreview, setImagePreview] = useState("");
 
   const [uploading, setUploading] = useState(false);
   const [uploading2, setUploading2] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleCancelCover = () => {
     setEditing(false);
@@ -66,13 +68,14 @@ export default function EditCover({ user, setCount, count, owner }: Props) {
       const response = await res.json();
       setUploading(false);
       setImage(response.secure_url);
-      console.log(response.secure_url);
+      // console.log(response.secure_url);
     }
   };
   const sendImage = async () => {
     if (image) {
+      setLoading(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/profile/updateCover/${user.profile?.userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/profile/updateCover`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -81,12 +84,15 @@ export default function EditCover({ user, setCount, count, owner }: Props) {
         }
       );
       const data = await res.json();
+      setLoading(false);
       setCount(!count);
+
       setUploading2(false);
-      console.log(data);
+      // console.log(data);
     }
   };
-
+  // console.log("loading??", loading);
+  // console.log("loading??", user);
   return (
     <div className="w-full bg-[#F4F4F5] h-[319px] flex items-center justify-center">
       {uploading2 ? (
@@ -133,7 +139,8 @@ export default function EditCover({ user, setCount, count, owner }: Props) {
               sendImage();
               handleCancelCover();
             }}
-            className="bg-black text-white">
+            className="bg-black text-white"
+          >
             {uploading ? (
               <>
                 <AiOutlineLoading3Quarters className="animate-spin" />
@@ -167,6 +174,7 @@ export default function EditCover({ user, setCount, count, owner }: Props) {
           )}
         </div>
       )}
+      {loading && <Loading />}
       {uploading && (
         <p className="absolute bottom-4 text-white text-sm">Uploading...</p>
       )}

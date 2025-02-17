@@ -8,6 +8,7 @@ import { Skeleton } from "@/app/_components/Skeleton";
 import { response } from "../signin/page";
 import { useRouter } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Loading } from "@/app/_components/loading";
 
 export default function SignupStep2() {
   const [response, setResponse] = useState<response>();
@@ -129,7 +130,8 @@ export default function SignupStep2() {
                 sendForm();
               }
             }}
-            className="w-full text-background">
+            className="w-full text-background"
+          >
             Continue
           </Button>
 
@@ -144,7 +146,7 @@ export default function SignupStep2() {
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
-                    Checking...
+                    <Loading />
                     <AiOutlineLoading3Quarters className="animate-spin" />
                   </div>
                 )}
