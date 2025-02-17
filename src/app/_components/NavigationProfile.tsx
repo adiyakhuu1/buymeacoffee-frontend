@@ -29,7 +29,7 @@ export async function NavigationProfile() {
           }
         );
         const data = await res.json();
-        setData(dat);
+        setData(data);
       } catch (e) {
         console.error(e, "aldaa");
       }
