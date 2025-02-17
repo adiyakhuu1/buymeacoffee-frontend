@@ -45,6 +45,7 @@ export default function SignupStep2() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(form),
+          credentials: "include",
         }
       );
       const response = await send.json();
@@ -128,8 +129,7 @@ export default function SignupStep2() {
                 sendForm();
               }
             }}
-            className="w-full text-background"
-          >
+            className="w-full text-background">
             Continue
           </Button>
 

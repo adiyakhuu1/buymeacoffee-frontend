@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState } from "react";
 import { ExternalLinkIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -13,17 +13,19 @@ export const SideBar = () => {
       <nav className="space-y-2">
         <Link href="/dashboard">
           <button
-            className={`w-full text-left p-2 rounded-lg text-[14px] hover:bg-[#F4F4F5] ${pathname.includes("dashboard") ? "bg-[#F4F4F5]" : ""}`}
-            onClick={() => setActive("Home")}
-          >
+            className={`w-full text-left p-2 rounded-lg text-[14px] hover:bg-[#F4F4F5] ${
+              pathname.includes("dashboard") ? "bg-[#F4F4F5]" : ""
+            }`}
+            onClick={() => setActive("Home")}>
             Home
           </button>
         </Link>
         <Link href="/explore">
           <button
-            className={`w-full text-left p-2 rounded-lg text-[14px] hover:bg-[#F4F4F5] ${pathname.includes("explore") ? "bg-[#F4F4F5]" : ""}`}
-            onClick={() => setActive("Explore")}
-          >
+            className={`w-full text-left p-2 rounded-lg text-[14px] hover:bg-[#F4F4F5] ${
+              pathname.includes("explore") ? "bg-[#F4F4F5]" : ""
+            }`}
+            onClick={() => setActive("Explore")}>
             Explore
           </button>
         </Link>
@@ -37,9 +39,10 @@ export const SideBar = () => {
         </Link>
         <Link href="/settings">
           <button
-            className={`w-full text-left p-2 rounded-lg text-[14px] hover:bg-[#F4F4F5] ${pathname.includes("settings") ? "bg-[#F4F4F5]" : ""}`}
-            onClick={() => setActive("Account settings")}
-          >
+            className={`w-full text-left p-2 rounded-lg text-[14px] hover:bg-[#F4F4F5] ${
+              pathname.includes("settings") ? "bg-[#F4F4F5]" : ""
+            }`}
+            onClick={() => setActive("Account settings")}>
             Account settings
           </button>
         </Link>
@@ -49,7 +52,3 @@ export const SideBar = () => {
 };
 
 export default SideBar;
-
-
-
-

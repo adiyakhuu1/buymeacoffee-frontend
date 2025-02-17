@@ -26,44 +26,46 @@ export async function NavigationProfile() {
     console.error(e, "aldaa");
   }
   return (
-    <div className="bg-slate-100 w-screen ">
-      <div className=" h-[56px] bg-white pt-2 ">
-        <div className="h-[40px] flex justify-between ">
-          <div className=" w-[151px] h-[24px] font-bold text-base flex justify-around text-black mt-2 ml-[80px]">
-            <p className="w-[27px] h-[27px] pl-[10px] mt-[4px] rounded-xs">
-              <LuCoffee />
-            </p>
-            <Link href="/dashboard">
-              <p> Buy Me Coffee</p>
-            </Link>
-          </div>
-
-          {dat.user ? (
-            <div className="w-[168px] h-[40px] flex justify-betweens mr-[80px]">
-              <Avatar>
-                <AvatarImage src={`${dat.user.profile.avatarImage}`} />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <p className="font-medium font-sm ml-[8px] pt-2">
-                {dat.user.username}
+    dat && (
+      <div className="bg-slate-100 w-screen ">
+        <div className=" h-[56px] bg-white pt-2 ">
+          <div className="h-[40px] flex justify-between ">
+            <div className=" w-[151px] h-[24px] font-bold text-base flex justify-around text-black mt-2 ml-[80px]">
+              <p className="w-[27px] h-[27px] pl-[10px] mt-[4px] rounded-xs">
+                <LuCoffee />
               </p>
+              <Link href="/dashboard">
+                <p> Buy Me Coffee</p>
+              </Link>
+            </div>
 
-              <Select>
-                <SelectTrigger className="w-[180px] border-none outline-none">
-                  <SelectValue placeholder="" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="logout">Logout</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          ) : (
-            <div className=" fixed right-10">
-              <Link href={`/account/signin`}>Not signed in</Link>
-            </div>
-          )}
+            {dat.user ? (
+              <div className="w-[168px] h-[40px] flex justify-betweens mr-[80px]">
+                <Avatar>
+                  <AvatarImage src={`${dat.user.profile.avatarImage}`} />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <p className="font-medium font-sm ml-[8px] pt-2">
+                  {dat.user.username}
+                </p>
+
+                <Select>
+                  <SelectTrigger className="w-[180px] border-none outline-none">
+                    <SelectValue placeholder="" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="logout">Logout</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : (
+              <div className=" fixed right-10">
+                <Link href={`/account/signin`}>Not signed in</Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    )
   );
 }

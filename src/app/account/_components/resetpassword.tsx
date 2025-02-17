@@ -82,6 +82,7 @@ export function ResetPassword() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ email }),
+          credentials: "include",
         }
       );
       const data = await res.json();
@@ -110,6 +111,7 @@ export function ResetPassword() {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
             otp,
             email,
@@ -183,8 +185,7 @@ export function ResetPassword() {
               <div
                 className={`${
                   response?.success ? `text-green-500` : `text-red-500`
-                }`}
-              >
+                }`}>
                 {response?.message === "OTP_MATCHED" && "OTP Matched"}
                 {response?.message === "OTP_NOT_MATCHED" && "OTP didn't match"}
               </div>
@@ -232,8 +233,7 @@ export function ResetPassword() {
                   <Button
                     onClick={changePassword}
                     disabled={!isValidNewPassword || loading}
-                    className="text-background"
-                  >
+                    className="text-background">
                     {loading ? (
                       <div className="flex gap-2 items-center">
                         <div>Please Wait</div>
@@ -252,8 +252,7 @@ export function ResetPassword() {
           <Button
             disabled={!valid || loading}
             onClick={handleCheck}
-            className="w-full text-background"
-          >
+            className="w-full text-background">
             Send Code
             {loading && <AiOutlineLoading3Quarters className="animate-spin" />}
           </Button>

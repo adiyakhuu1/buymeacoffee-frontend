@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import EditCover from "../view-page/_components/EditCover";
-import FrameEditPage from "../view-page/_components/FrameEditPage";
-import FrameViewDonation from "../view-page/_components/FrameViewDonation";
 import { useParams } from "next/navigation";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { data } from "../dashboard/page";
-import { user } from "../utils/types";
-import { DonationComplete } from "../explore/_components/DonationComplete";
+import { user } from "@/app/utils/types";
+import EditCover from "@/app/view-page/_components/EditCover";
+import FrameEditPage from "@/app/view-page/_components/FrameEditPage";
+import FrameViewDonation from "@/app/view-page/_components/FrameViewDonation";
 
 type response = {
   data: {

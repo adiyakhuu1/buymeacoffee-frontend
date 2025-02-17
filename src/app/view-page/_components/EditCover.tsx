@@ -77,6 +77,7 @@ export default function EditCover({ user, setCount, count, owner }: Props) {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ image }),
+          credentials: "include",
         }
       );
       const data = await res.json();
@@ -132,8 +133,7 @@ export default function EditCover({ user, setCount, count, owner }: Props) {
               sendImage();
               handleCancelCover();
             }}
-            className="bg-black text-white"
-          >
+            className="bg-black text-white">
             {uploading ? (
               <>
                 <AiOutlineLoading3Quarters className="animate-spin" />

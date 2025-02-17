@@ -53,7 +53,11 @@ export default function SignupStep1() {
       timeout = setTimeout(async () => {
         const send = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/users/auth/${form.username}`,
-          { method: "POST", headers: { "Content-Type": "application/json" } }
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }
         );
         const response = await send.json();
         setResponse(response);
@@ -116,8 +120,7 @@ export default function SignupStep1() {
                   : response?.yes
                   ? "text-green-400"
                   : "text-gray-300"
-              }`}
-            >
+              }`}>
               {response?.message}
             </div>
           ) : (
@@ -138,8 +141,7 @@ export default function SignupStep1() {
             }
           }}
           disabled={form.username.length < 6 || !response?.yes}
-          className="w-full text-background"
-        >
+          className="w-full text-background">
           Continue
         </Button>
       </div>
