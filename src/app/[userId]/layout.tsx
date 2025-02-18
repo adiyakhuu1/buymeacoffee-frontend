@@ -45,13 +45,15 @@ export async function generateMetadata({
     return {
       title: `Profile of ${user.data.user.profile.name}`,
       description: `View the profile of ${user.data.user.profile.name}`,
+      icons: {
+        icon: user.data.propile.avatarImage || "/favicon.ico",
+      },
     };
   }
 
   return {
-    title: "Buy Me a Coffee",
-    description:
-      "Buy Me a Coffee is the best way for creators and artists to accept support and membership from their fans.",
+    title: "User not found",
+    description: "User not found!",
   };
 }
 export default function RootLayout({
