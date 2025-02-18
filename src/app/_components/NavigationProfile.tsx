@@ -16,7 +16,7 @@ import { cookies } from "next/headers";
 import { data } from "../dashboard/page";
 import { Logout } from "./logout";
 
-export async function NavigationProfile() {
+export function NavigationProfile() {
   const [dat, setData] = useState<data>();
 
   useEffect(() => {

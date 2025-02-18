@@ -28,9 +28,9 @@ export default function ViewPage() {
       );
       const data = await res.json();
       if (data.success) {
-        router.push(`/${data.user.id}`);
+        router.replace(`/${data.user.id}`);
       } else {
-        router.push(`/dashboard`);
+        router.replace(`/dashboard`);
       }
       setwaitingfordata(false);
     };
