@@ -21,7 +21,11 @@ export function middleware(request: NextRequest) {
   let cookie = request.cookies.get("RefreshToken");
   const isLoggedIn = cookie?.value || !isTokenExpired(cookie?.value!);
   console.log(cookie);
-  if (isLoggedIn && request.nextUrl.pathname === "/") {
+  if (
+    (isLoggedIn && request.nextUrl.pathname === "/") ||
+    request.nextUrl.pathname === "/account/signin" ||
+    request.nextUrl.pathname === "/account/signup"
+  ) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
   return NextResponse.next();
