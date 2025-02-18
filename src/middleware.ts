@@ -18,15 +18,11 @@ export const isTokenExpired = (token: string) => {
 };
 
 export function middleware(request: NextRequest) {
-  let cookie = request.cookies.get("RefreshToken");
-  const isLoggedIn = cookie?.value || !isTokenExpired(cookie?.value!);
-  console.log(cookie);
-  if (isLoggedIn && request.nextUrl.pathname === "/") {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
-  }
-  return NextResponse.next();
+  let cookie = request.cookies.get("refreshToken");
+  if (!cookie?.value || isTokenExpired(cookie?.value!))
+    return NextResponse.redirect(new URL("/account/signin", request.url));
 }
 
 export const config = {
-  matcher: ["/", "/account/signin", "/account/signup"],
+  matcher: ["/", "dashboard", "settings"],
 };
