@@ -157,7 +157,7 @@ export default function FrameViewDonation(props: Props) {
             className="w-full py-2 rounded-lg text-background"
             disabled={isValid}
           >
-            Support
+            Support {form.amount}
           </Button>
         </div>
       )}
