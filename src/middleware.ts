@@ -20,6 +20,7 @@ export const isTokenExpired = (token: string) => {
 export function middleware(request: NextRequest) {
   let cookie = request.cookies.get("RefreshToken");
   const isLoggedIn = cookie?.value || !isTokenExpired(cookie?.value!);
+  console.log(cookie);
   if (isLoggedIn && request.nextUrl.pathname === "/") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
