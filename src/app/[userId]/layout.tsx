@@ -46,7 +46,7 @@ export async function generateMetadata({
       title: `Profile of ${user.data.user.profile.name}`,
       description: `View the profile of ${user.data.user.profile.name}`,
       icons: {
-        icon: user.data.propile.avatarImage || "/favicon.ico",
+        icon: user.data.profile.avatarImage || "/favicon.ico",
       },
     };
   }
