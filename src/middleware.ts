@@ -18,7 +18,7 @@ export const isTokenExpired = (token: string) => {
 };
 
 export function middleware(request: NextRequest) {
-  let cookie = request.cookies.get("refreshToken");
+  let cookie = request.cookies.get("RefreshToken");
   if (!cookie?.value || isTokenExpired(cookie?.value!))
     return NextResponse.redirect(new URL("/account/signin", request.url));
 }
