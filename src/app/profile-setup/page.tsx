@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import ProfileSetup1 from "./_components/profile_setup_form_step1";
 import ProfileSetup2 from "./_components/profile_setup_form_step2";
 import Link from "next/link";
-import { routeraaa } from "./random";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 type Props = {
