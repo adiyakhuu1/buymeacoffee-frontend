@@ -19,11 +19,14 @@ export const isTokenExpired = (token: string) => {
 
 export function middleware(request: NextRequest) {
   let cookie = request.cookies.get("RefreshToken");
+  const isLoggedIn = cookie?.value || !isTokenExpired(cookie?.value!);
   console.log(cookie);
-  if (!cookie?.value || isTokenExpired(cookie?.value!))
-    return NextResponse.redirect(new URL("/account/signin", request.url));
+  if (isLoggedIn && request.nextUrl.pathname === "/") {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/dashboard", "/settings"],
+  matcher: ["/", "/account/signin", "/account/signup"],
 };
