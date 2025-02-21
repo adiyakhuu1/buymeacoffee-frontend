@@ -32,7 +32,7 @@ export default function FrameEditPage(props: Props) {
   );
 
   return (
-    <div className="max-w-[632px]">
+    <div className="max-w-[632px] animate-fade-down">
       <div className="bg-background  border border-background  rounded-lg p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">

@@ -18,8 +18,10 @@ import { Logout } from "./logout";
 
 export function NavigationProfile() {
   const [dat, setData] = useState<data>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const fetData = async () => {
       try {
         const res = await fetch(
@@ -35,38 +37,51 @@ export function NavigationProfile() {
       }
     };
     fetData();
+    setLoading(false);
   }, []);
-  return (
-    dat && (
-      <div className="bg-slate-100 w-screen ">
-        <div className=" h-[56px] bg-white pt-2  content-center">
-          <div className="h-[40px] flex justify-around ">
-            <div className="h-[24px] font-bold text-base flex justify-around text-black mt-2 ml-[80px]">
-              <p className=" h-[27px] pl-[10px] mt-[4px] rounded-xs">
-                <LuCoffee />
-              </p>
-              <Link href="/dashboard">
-                <p> Buy Me Coffee</p>
-              </Link>
-            </div>
-
-            {dat.user ? (
-              <div className=" h-[40px] flex gap-10 items-center">
-                <Avatar>
-                  <AvatarImage src={`${dat.user.profile.avatarImage}`} />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <p className=" text-foreground">Hello, {dat.user.username}</p>
-                <Logout />
-              </div>
-            ) : (
-              <div className=" fixed right-10">
-                <Link href={`/account/signin`}>Not signed in</Link>
-              </div>
-            )}
+  return dat ? (
+    <div className="bg-slate-100 w-screen ">
+      <div className=" h-[56px] bg-white pt-2  content-center">
+        <div className="h-[40px] flex justify-around ">
+          <div className="h-[24px] font-bold text-base flex justify-around text-black mt-2 ml-[80px]">
+            <p className=" h-[27px] pl-[10px] mt-[4px] rounded-xs">
+              <LuCoffee />
+            </p>
+            <Link href="/dashboard">
+              <p> Buy Me Coffee</p>
+            </Link>
           </div>
+
+          {dat.user ? (
+            <div className=" h-[40px] flex gap-10 items-center">
+              <Avatar>
+                <AvatarImage src={`${dat.user.profile.avatarImage}`} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <p className=" text-foreground">Hello, {dat.user.username}</p>
+              <Logout />
+            </div>
+          ) : (
+            <div className=" fixed right-10">
+              <Link href={`/account/signin`}>Not signed in</Link>
+            </div>
+          )}
         </div>
       </div>
-    )
+    </div>
+  ) : (
+    <div className="bg-slate-100 w-screen ">
+      <div className=" h-[56px] bg-white pt-2  content-center">
+        <div className="h-[40px] flex justify-around ">
+          <div className="h-[24px] font-bold text-base flex justify-around text-black bg-secondary w-[200px] mt-2 ml-[80px] animate-pulse">
+            <p className=" h-[27px] pl-[10px] mt-[4px] rounded-xs"></p>
+            <Link href="/dashboard">
+              <p></p>
+            </Link>
+          </div>
+          <div className=" w-24 bg-secondary h-[24px]  animate-pulse mt-2 flex gap-10 items-center"></div>
+        </div>
+      </div>
+    </div>
   );
 }

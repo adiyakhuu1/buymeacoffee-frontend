@@ -97,7 +97,7 @@ export default function FrameViewDonation(props: Props) {
     <>
       {loading && <Loading />}
       {response?.success ? (
-        <div className=" w-full min-h-screen fixed transform top-1/2 left-1/2 bottom-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-background justify-items-center content-center">
+        <div className="  animate-fade-down w-full min-h-screen fixed transform top-1/2 left-1/2 bottom-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-background justify-items-center content-center">
           <DonationComplete user={props.user} />
         </div>
       ) : (
